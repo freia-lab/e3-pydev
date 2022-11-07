@@ -1,0 +1,3 @@
+[submodule "PyDevice"]
+	path = PyDevice
+	url = https://github.com/klemenv/PyDevice.git
