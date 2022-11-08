@@ -22,6 +22,11 @@ include $(E3_REQUIRE_CONFIG)/DECOUPLE_FLAGS
 # Most modules only need to be built for x86_64
 ARCH_FILTER += linux-x86_64
 
+USR_LDFLAGS += -lpthread -ldl -lutil -lm -lpython3.6m -Xlinker -export-dynamic
+USR_CXXFLAGS += -I/usr/include/python3.6m -fno-strict-aliasing -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv
+USR_CXXFLAGS += -std=c++11
+LIB_SYS_LIBS += python3.6m
+
 # If your module has dependencies, you will generate want to include them like
 #
 #     REQUIRED += asyn
@@ -34,7 +39,7 @@ ARCH_FILTER += linux-x86_64
 # Since this file (pydev.Makefile) is copied into
 # the module directory at build-time, these paths have to be relative
 # to that path
-APP := pydevApp
+APP := .
 APPDB := $(APP)/Db
 APPSRC := $(APP)/src
 
@@ -45,9 +50,54 @@ APPSRC := $(APP)/src
 #     HEADERS += $(APPSRC)/library.h
 #     USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
-TEMPLATES += $(wildcard $(APPDB)/*.db)
-TEMPLATES += $(wildcard $(APPDB)/*.proto)
-TEMPLATES += $(wildcard $(APPDB)/*.template)
+SOURCES   += $(APPSRC)/asyncexec.cpp
+SOURCES   += $(APPSRC)/epicsdevice.cpp
+#SOURCES   += $(APPSRC)/pycalcRecord.cpp
+SOURCES   += $(APPSRC)/pydev_ai.cpp
+SOURCES   += $(APPSRC)/pydev_ao.cpp
+SOURCES   += $(APPSRC)/pydev_bi.cpp
+SOURCES   += $(APPSRC)/pydev_bo.cpp
+SOURCES   += $(APPSRC)/pydev_longin.cpp
+SOURCES   += $(APPSRC)/pydev_longout.cpp
+SOURCES   += $(APPSRC)/pydev_lsi.cpp
+SOURCES   += $(APPSRC)/pydev_lso.cpp
+SOURCES   += $(APPSRC)/pydev_mbbi.cpp
+SOURCES   += $(APPSRC)/pydev_mbbo.cpp
+SOURCES   += $(APPSRC)/pydev_stringin.cpp
+SOURCES   += $(APPSRC)/pydev_stringout.cpp
+SOURCES   += $(APPSRC)/pydev_waveform.cpp
+SOURCES   += $(APPSRC)/pywrapper.cpp
+SOURCES   += $(APPSRC)/util.cpp
+
+#TEMPLATES += $(wildcard $(APPDB)/*.db)
+#TEMPLATES += $(wildcard $(APPDB)/*.proto)
+#TEMPLATES += $(wildcard $(APPDB)/*.template)
+
+############################################################################
+#
+# Add any .dbd files that should be included (e.g. from user-defined functions, etc.)
+#
+############################################################################
+
+DBDS   += $(APPSRC)/pydev.dbd
+#DBDS   += $(APPSRC)/pycalcRecord.dbd
+
+
+############################################################################
+#
+# Add any header files that should be included in the install (e.g. 
+# StreamDevice or asyn header files that are used by other modules)
+#
+############################################################################
+
+#HEADERS   += 
+
+
+############################################################################
+#
+# Add any startup scripts that should be installed in the base directory
+#
+############################################################################
 
 SCRIPTS += $(wildcard ../iocsh/*.iocsh)
 
