@@ -50,9 +50,9 @@ APPSRC := $(APP)/src
 #     HEADERS += $(APPSRC)/library.h
 #     USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
+SOURCES   += $(APPSRC)/pycalcRecord.cpp
 SOURCES   += $(APPSRC)/asyncexec.cpp
 SOURCES   += $(APPSRC)/epicsdevice.cpp
-#SOURCES   += $(APPSRC)/pycalcRecord.cpp
 SOURCES   += $(APPSRC)/pydev_ai.cpp
 SOURCES   += $(APPSRC)/pydev_ao.cpp
 SOURCES   += $(APPSRC)/pydev_bi.cpp
@@ -79,8 +79,8 @@ SOURCES   += $(APPSRC)/util.cpp
 #
 ############################################################################
 
+DBDS   += $(APPSRC)/pycalcRecord.dbd
 DBDS   += $(APPSRC)/pydev.dbd
-#DBDS   += $(APPSRC)/pycalcRecord.dbd
 
 
 ############################################################################
