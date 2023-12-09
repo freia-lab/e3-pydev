@@ -20,11 +20,17 @@ include $(E3_REQUIRE_TOOLS)/driver.makefile
 
 # Most modules only need to be built for x86_64
 ARCH_FILTER += linux-x86_64
+ARCH_FILTER += linux-x86_64-debug
 
-USR_LDFLAGS += -lpthread -ldl -lutil -lm -lpython3.6m -Xlinker -export-dynamic
-USR_CXXFLAGS += -I/usr/include/python3.6m -fno-strict-aliasing -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv
-USR_CXXFLAGS += -std=c++11
-LIB_SYS_LIBS += python3.6m
+# Specify the Python version that is used
+# python3.10 for Ubuntu 22.04, python3.6m for Centos7
+#
+PYTHON_VER = python3.10
+
+USR_LDFLAGS += -lpthread -ldl -lutil -lm -l$(LIB_SYS_LIBS) -Xlinker -export-dynamic
+USR_CXXFLAGS += -I/usr/include/python3.10 -I/usr/include/python3.6m -fno-strict-aliasing -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv -DNDEBUG -O2 -g -pipe -Wall -Wp,-D_FORTIFY_SOURCE=2 -fexceptions -fstack-protector-strong --param=ssp-buffer-size=4 -grecord-gcc-switches -m64 -mtune=generic -D_GNU_SOURCE -fPIC -fwrapv
+USR_CXXFLAGS += -std=c++11 -I/usr/include/$(PYTHON_VER)
+LIB_SYS_LIBS += $(PYTHON_VER)
 
 # If your module has dependencies, you will generate want to include them like
 #
